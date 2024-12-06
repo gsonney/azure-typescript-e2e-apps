@@ -26,6 +26,7 @@ type ListResponse = {
 
 function App() {
   const containerName = `upload`;
+  // const containerName = `avatars`;
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [sasTokenUrl, setSasTokenUrl] = useState<string>('');
   const [uploadStatus, setUploadStatus] = useState<string>('');
@@ -195,23 +196,25 @@ function App() {
           )}
 
           {/* Uploaded Files Display */}
+
           <Grid container spacing={2}>
-            {list.map((item) => (
-              <Grid item xs={6} sm={4} md={3} key={item}>
-                <Card>
-                  {item.endsWith('.jpg') ||
-                  item.endsWith('.png') ||
-                  item.endsWith('.jpeg') ||
-                  item.endsWith('.gif') ? (
+            {list
+              .filter(
+                (item) => selectedFile && item.endsWith(selectedFile.name)
+              )
+              .map((item) => (
+                <Grid item xs={6} sm={4} md={3} key={item}>
+                  <Card>
                     <CardMedia component="img" image={item} alt={item} />
-                  ) : (
-                    <Typography variant="body1" gutterBottom>
+                    <Typography
+                      variant="body1"
+                      sx={{ wordBreak: 'break-word' }}
+                    >
                       {item}
                     </Typography>
-                  )}
-                </Card>
-              </Grid>
-            ))}
+                  </Card>
+                </Grid>
+              ))}
           </Grid>
         </Box>
       </ErrorBoundary>
