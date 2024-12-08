@@ -1,3 +1,7 @@
+# Tutorial to follow
+
+https://learn.microsoft.com/en-us/azure/developer/javascript/tutorial/browser-file-upload-azure-storage-blob?tabs=github-codespaces#13-deploy-static-web-app-to-azure
+
 # Azure Functions V4 app to upload file to Azure Storage
 
 Upload a file to Azure Storage using Azure Functions V4 and the Azure SDK package for Azure Storage.
