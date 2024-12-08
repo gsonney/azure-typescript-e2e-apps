@@ -1,37 +1,51 @@
----
-name: Azure TypeScript apps
-description: A variety of TypeScript apps to deploy on Azure or integrate with Azure services.
-page_type: sample
-languages:
-- javascript
-- typescript
-products:
-- azure-app-service
-- azure-functions
----
+# Azure Functions V4 app to upload file to Azure Storage
 
-# Azure TypeScript E2E apps
+Upload a file to Azure Storage using Azure Functions V4 and the Azure SDK package for Azure Storage.
 
-A monorepo of apps used with the Azure cloud as part of the [Azure Developer Center for JavaScript](https://learn.microsoft.com/azure/developer/javascript/). This repo provides sample code and project to deploy JavaScript and TypeScript to Azure. 
+1. Upload file to HTTP endpoint.
+1. File is saved to Azure Storage. 
+1. Read-only SAS token is generated for the file. 
+1. Read-only URL including SAS token is returned to the client.
 
-## Features
+## Prerequisite
 
-* `.devcontainer`: local proxied react + api using [SWA CLI](https://learn.microsoft.com/en-us/azure/static-web-apps/static-web-apps-cli-configuration)
-* `app-react-vite`: very simple React 18 + Vite app with Azure _easy auth_
-* `api`: very simple Node.js Azure Functions v4 (new programming model) with `/status` route
-* `api-inmemory`: very simple Node.js Azure Functions v4 (new programming model) with `/status` and in-memory db for `/todo` route
-* `docs`: helpful information about resources
-* `example-workflows`: example GitHub workflow files you can use to build and deploy apps
+You need an Azure Storage account created and ready for Azure Functions.
 
-## Documentation
+## Environment variables
 
-* React 18 (Vite) + Azure Functions API v4
+The app needs the following environment variables. These should be available in the `local.settings.json` while developing locally. 
 
-## Naming conventions
+```
+"AzureWebJobsStorage": "<STORAGE-CONNECTION-STRING>",
+"FUNCTIONS_WORKER_RUNTIME": "node",
+"AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+"Azure_Storage_AccountName": "<STORAGE-ACCOUNT-NAME>",
+"Azure_Storage_AccountKey":"<STORAGE-ACCOUNT-KEY>"
+```
 
-|Name|Description|
-|--|--|
-|`app-`|Client or full-stack web app.|
-|`api=`|HTTP API.|
-|`lib-`|Library. Included in other projects.|
-|`cli-`|Command-line interface.|
+## Clone, install and run locally
+
+1. In a new folder, use the following commands to get source code for this project. 
+
+    ```bash
+    git init
+    git remote add origin https://github.com/azure-samples/azure-typescript-e2e-apps
+    git config core.sparseCheckout true
+    git sparse-checkout set api-functions-v4-upload-file
+    git pull origin main
+    git sparse-checkout disable
+    ```
+
+2. Install the dependencies.
+
+    ```bash
+    npm install
+    ```
+
+## Call function
+
+Use the following cURL command, provided in [`upload-text-file.sh`](upload-text-file.sh) to automate your file uploads during development.
+
+```bash
+curl --location 'http://localhost:7071/api/upload' -F "file=@test-file.txt" --form 'name="tom"' --verbose
+```
